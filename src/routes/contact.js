@@ -16,6 +16,11 @@ const transporter = nodemailer.createTransport({
 router.post('/', (req, res) => {
     const { name, phone, address, email, source } = req.body;
 
+    // Validaciones básicas
+    if (!name || !phone || !address || !email || !source) {
+        return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+    }
+
     // Inserción en la base de datos
     const query = 'INSERT INTO contact_forms (name, phone, address, email, source, created_at) VALUES (?, ?, ?, ?, ?, NOW())';
     
@@ -28,7 +33,7 @@ router.post('/', (req, res) => {
         // Configurar el correo a enviar
         const mailOptions = {
             from: process.env.EMAIL_USER,
-            to: 'admin@academia.com', // Cambia esto por el correo al que quieras enviar el mensaje
+            to: 'rodrigo.lagos.fernandez@gmail.com', // Cambia esto por el correo al que quieras enviar el mensaje
             subject: 'Nuevo formulario de contacto recibido',
             text: `Se ha recibido un nuevo formulario de contacto:
             Nombre: ${name}
